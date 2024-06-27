@@ -1,4 +1,4 @@
-# Mineswwper
+# Minesweeper
 
 By Javier Carrillo
 
