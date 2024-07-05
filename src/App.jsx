@@ -1,14 +1,15 @@
 import './App.css';
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Test from './components/test'
+import Menu from './components/Menu'
 
 function App() {
   return (
     <div className="bg-gray-50">
       <Header />
         <main className="overflow-hidden text-gray-900">
-          <Test></Test>
+          <h1 className='text-4xl font-extrabold mx-[5%] my-4'>Minesweeper</h1>
+          <Menu/>
         </main>
       <Footer />
     </div>
