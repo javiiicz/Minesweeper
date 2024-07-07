@@ -1,7 +1,7 @@
 import './App.css';
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Menu from './components/Menu'
+import Game from './components/Field'
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <Header />
         <main className="overflow-hidden text-gray-900">
           <h1 className='text-4xl font-extrabold mx-[5%] my-4'>Minesweeper</h1>
-          <Menu/>
+          <Game/>
         </main>
       <Footer />
     </div>
