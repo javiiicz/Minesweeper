@@ -56,14 +56,15 @@ function Game () {
                     </div>
                     <p>00</p>
                 </div>
-                <div className="flex justify-center bg-gray-300 m-2 p-12 ">
+                
+                <div className="flex justify-center bg-gray-300 m-2 py-12 ">
                     <div className="mines my-auto">
                         {grid.map(function(row, rowIndex) {
                             return (
-                                <div key={rowIndex} className="flex flex-row gap-1 mb-1">
+                                <div key={rowIndex} className="flex flex-row gap-1 m-1">
                                 {row.map(function(cell, colIndex) {
                                     return (
-                                        <div key = {`${rowIndex}-${colIndex}`} className="w-5 h-5 bg-gray cursor-pointer bg-slate-400">
+                                        <div key = {`${rowIndex}-${colIndex}`} className="w-5 h-5 bg-gray cursor-pointer bg-slate-400 hover:bg-slate-500 active:bg-slate-600 outline-2 outline outline-slate-500">
                                             
                                         </div>
                                     );
