@@ -30,6 +30,17 @@ export class Board {
     }
 
 
+    fill_board_numbers() {
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.cols; j++) {
+                if (this.matrix[i][j] != "*") {
+                    this.matrix = this.calculate_mines_around(i,j)
+                }
+            }
+        }
+    }
+
+
     calculate_mines_around(i,j) {
 
         if (i < 0 || j < 0 || i >= this.rows || j >= this.cols) {
@@ -47,6 +58,8 @@ export class Board {
                 }
             }
         }
+
+        return counter
     }
 
 
