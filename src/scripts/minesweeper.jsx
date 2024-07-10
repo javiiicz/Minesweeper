@@ -30,6 +30,26 @@ export class Board {
     }
 
 
+    calculate_mines_around(i,j) {
+
+        if (i < 0 || j < 0 || i >= this.rows || j >= this.cols) {
+            throw new Error("Coordinates out of range")
+        }
+
+        let counter = 0
+        for (let a = -1; a < 2; a++) {
+            for (let b = -1; b < 2; b++) {
+                if (i + a < 0 || j + b < 0 || i + a >= this.rows || j + b >= this.cols) {
+                    continue
+                }
+                else if (this.matrix[i + a][j + b] == "*") {
+                    counter++
+                }
+            }
+        }
+    }
+
+
     print_board() {
         let out = ""
 
