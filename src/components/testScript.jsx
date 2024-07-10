@@ -2,9 +2,11 @@ import { Board } from "../scripts/minesweeper"
 
 export function Test () {
     function debug ( ) {
-        let B = new Board(9, 9);
-        B.generate_mines(1, 1, 10);
+        let B = new Board(16, 16, "intermediate");
+        B.click(3, 10);
         B.print_board();
+        B.click(10,10);
+        
     }
 
     return (

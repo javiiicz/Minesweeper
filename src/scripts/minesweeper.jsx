@@ -1,11 +1,36 @@
 export class Board {
-    constructor(rows, cols) {
+    constructor(rows, cols, difficulty) {
         this.rows = rows
         this.cols = cols
+        this.mines = 0
+        this.difficulty = difficulty
         
         this.matrix = new Array(rows)
         for (let i = 0; i < rows; i++) {
-            this.matrix[i] = new Array(cols)
+            this.matrix[i] = new Array(cols).fill(0);
+        }
+
+        this.difficulties = {
+            beginner: {rows: 9, cols: 9, mines: 10},
+            intermediate: {rows: 16, cols: 16, mines: 40},
+            expert: {rows: 16, cols: 30, mines: 99}
+        }
+    }
+
+
+    click(i, j){
+        // First click generates board
+        if (this.mines == 0) {
+            this.generate_mines(i, j, this.difficulties[this.difficulty]["mines"]);
+            this.fill_board_numbers();
+        }
+
+        if (this.matrix[i][j] == "*") {
+            throw new Error("Game Over");
+            this.gameOver();
+        }
+        else {
+            ;
         }
     }
 
@@ -17,14 +42,13 @@ export class Board {
             throw new Error("No space for all the mines") 
         }
 
-        let mines = 0
-        while (mines != n) {
+        while (this.mines != n) {
             let row = Math.floor(Math.random() * this.rows)
             let col = Math.floor(Math.random() * this.cols)
             
             if ((row != i || col != j) && (this.matrix[row][col] != "*")) {
                 this.matrix[row][col] = "*"
-                mines++
+                this.mines++
             }
         }
     }
@@ -34,7 +58,7 @@ export class Board {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.cols; j++) {
                 if (this.matrix[i][j] != "*") {
-                    this.matrix = this.calculate_mines_around(i,j)
+                    this.matrix[i][j] = this.calculate_mines_around(i,j).toString()
                 }
             }
         }
@@ -53,7 +77,8 @@ export class Board {
                 if (i + a < 0 || j + b < 0 || i + a >= this.rows || j + b >= this.cols) {
                     continue
                 }
-                else if (this.matrix[i + a][j + b] == "*") {
+                
+                else if (this.matrix[i + a][j + b] == "*") {   
                     counter++
                 }
             }
