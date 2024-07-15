@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import {motion, AnimatePresence} from 'framer-motion';
 import smileUrl from '../images/ms-smile.webp'
+import {Board} from "../scripts/minesweeper.jsx"
 
 function Game () {
     const [isVisible, setIsVisible] = useState(false);
     const [difficulty, setDifficulty] = useState("expert");
     const [grid, setGrid] = useState([]);
+    const [gridState, setGridState] = useState([]);
+    const [B, setB] = useState(null);
 
     const difficulties = {
         beginner: {rows: 9, cols: 9, mines: 10},
@@ -23,7 +26,16 @@ function Game () {
             return new Array(cols).fill(0)
         });
         setGrid(newGrid);
+        setGridState(Array(rows).fill().map(() => Array(cols).fill(null)));
+        setB(new Board(rows, cols, mines));
     }
+
+    const cellHandleClick = (i, j) => {
+        const result = B.click(i,j);
+        const newGridState = [...gridState];
+        newGridState[i][j] = String(result);
+        setGridState(newGridState);
+    };
 
     return (
         <div className="px-[20%] my-10">
@@ -64,8 +76,8 @@ function Game () {
                                 <div key={rowIndex} className="flex flex-row gap-1 m-1">
                                 {row.map(function(cell, colIndex) {
                                     return (
-                                        <div key = {`${rowIndex}-${colIndex}`} className="w-5 h-5 bg-gray cursor-pointer bg-slate-400 hover:bg-slate-500 active:bg-slate-600 outline-2 outline outline-slate-500">
-                                            
+                                        <div key = {`${rowIndex}-${colIndex}`} onClick={() => cellHandleClick(rowIndex, colIndex) } className="w-5 h-5 bg-gray cursor-pointer bg-slate-400 hover:bg-slate-500 active:bg-slate-600 outline-2 outline outline-slate-500">
+                                            {gridState[rowIndex][colIndex]}
                                         </div>
                                     );
                                 })}
