@@ -3,7 +3,7 @@ import {motion, AnimatePresence} from 'framer-motion';
 import smileUrl from '../images/ms-smile.webp'
 import {Board} from "../scripts/minesweeper.jsx"
 
-const EMPTY = "_"
+const FLAG = "f"
 
 function Game () {
     const [isVisible, setIsVisible] = useState(false);
@@ -13,6 +13,7 @@ function Game () {
     const [hoveredCell, setHoveredCell] = useState(null);
     const [B, setB] = useState(null);
     const [gameStatus, setGameStatus] = useState('ready')
+    const [mineCounter, setMineCounter] = useState(0)
 
     const difficulties = {
         beginner: {rows: 9, cols: 9, mines: 10},
@@ -57,6 +58,7 @@ function Game () {
         setGrid(newGrid);
         setGridState(Array(rows).fill().map(() => Array(cols).fill(null)));
         setB(new Board(rows, cols, mines));
+        setMineCounter(mines);
         setGameStatus('playing')
     }
 
@@ -71,27 +73,56 @@ function Game () {
     const cellHandleClick = (i, j) => {
         let result = B.click(i,j);
         const newGridState = [...gridState];
-        result = handleResult(result)
         newGridState[i][j] = result;
         setGridState(newGridState);
 
-        if (result == EMPTY) {
+        if (result == 0) {
             revealSurroundingCells(i,j)
         };
     }
 
     const cellSpaceClick = (i, j) => {
         let result;
+
         if (gridState[i][j] == null) {
-            result = "🚩"
+            result = FLAG
+            setMineCounter(mineCounter - 1)
         }
-        else if (gridState[i][j] == "🚩") {
+        else if (gridState[i][j] == FLAG) {
             result = null
+            setMineCounter(mineCounter + 1)
+        }
+        else if (gridState[i][j] == flagsAround(i,j)) {
+            revealSurroundingCells(i,j)
+            return
+        }
+        else {
+            return
         }
         
         const newGridState = [...gridState];
         newGridState[i][j] = result;
         setGridState(newGridState);
+    }
+
+    function flagsAround(i,j)  {
+        let counter = 0;
+        for (let k = -1; k <= 1; k++) {
+            for (let l = -1; l <= 1; l++) {
+                const newI = i + k;
+                const newJ = j + l;
+                
+                if (k == 0 && l ==0) {
+                    continue
+                }
+
+                if (gridState[newI][newJ] == FLAG) {
+                    counter++
+                }
+            }
+        }
+
+        return counter
     }
 
     const revealSurroundingCells = (i, j) => {
@@ -109,18 +140,6 @@ function Game () {
             };
         };
     };
-
-    function handleResult(num) {
-        if (num == -1) {
-            return "💥"
-        }
-        else if (num == 0 ) {
-            return EMPTY
-        }
-        else {
-            return num
-        }
-    }
 
     function resetGane() {
         setDifficulty(difficulty)
@@ -155,7 +174,7 @@ function Game () {
                     <div className="button w-8 h-8 border border-gray-300 rounded active:bg-gray-300">
                         <img src = {smileUrl} onClick={resetGame}></img>
                     </div>
-                    <p>00</p>
+                    <p>{mineCounter}</p>
                 </div>
                 
                 <div className="flex justify-center bg-gray-300 m-2 py-12 ">
