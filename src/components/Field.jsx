@@ -3,31 +3,58 @@ import {motion, AnimatePresence} from 'framer-motion';
 import smileUrl from '../images/ms-smile.webp'
 import {Board} from "../scripts/minesweeper.jsx"
 
-const FLAG = "f"
+const FLAG = "F"
+const MAX_TIME = 999
+const DIFFICULTIES = {
+    beginner: {rows: 9, cols: 9, mines: 10},
+    intermediate: {rows: 16, cols: 16, mines: 40},
+    expert: {rows: 16, cols: 30, mines: 99}
+}
 
 function Game () {
+    // Game Variables
     const [isVisible, setIsVisible] = useState(false);
     const [difficulty, setDifficulty] = useState("expert");
     const [grid, setGrid] = useState([]);
     const [gridState, setGridState] = useState([]);
     const [hoveredCell, setHoveredCell] = useState(null);
     const [B, setB] = useState(null);
-    const [gameStatus, setGameStatus] = useState('ready')
+    const [isRunning, setIsRunning] = useState(false)
     const [mineCounter, setMineCounter] = useState(0)
+    const [gameTime, setGameTime] = useState(0)
 
-    const difficulties = {
-        beginner: {rows: 9, cols: 9, mines: 10},
-        intermediate: {rows: 16, cols: 16, mines: 40},
-        expert: {rows: 16, cols: 30, mines: 99}
+    const startTimer = () => setIsRunning(true);
+    const stopTimer = () => setIsRunning(false)
+    const resetTimer = () => {
+        setIsRunning(false)
+        setGameTime(0)
     }
 
     const resetGame = useCallback(() => {
         setGridState([])
         setHoveredCell(null)
-        setGameStatus('ready')
         generateGrid()
-
+        resetTimer();
     }, [difficulty])
+
+    
+    //
+    useEffect(() => {
+        let intervalId;
+        if (isRunning && gameTime < MAX_TIME) {
+            intervalId = setInterval(() => {
+                setGameTime(prevTime => {
+                    if (prevTime >= MAX_TIME) {
+                        clearInterval(intervalId);
+                        setIsRunning(false);
+                        return MAX_TIME
+                    }
+                    return prevTime + 1
+                })
+            }, 1000)
+        }
+        return () => clearInterval(intervalId)
+    }, [isRunning])
 
     useEffect(() => {
         resetGame();
@@ -38,7 +65,7 @@ function Game () {
             if (event.code === 'Space' && hoveredCell) {
                 event.preventDefault();
                 const { row, col } = hoveredCell;
-                cellSpaceClick(row, col);
+                handleCellSpace(row, col);
             }
         }
 
@@ -49,9 +76,11 @@ function Game () {
         }
 
     }, [hoveredCell]);
+    //
+
 
     function generateGrid() {
-        const {rows, cols, mines} = difficulties[difficulty]
+        const {rows, cols, mines} = DIFFICULTIES[difficulty]
         const newGrid = new Array(rows).fill().map(function() {
             return new Array(cols).fill(0)
         });
@@ -59,7 +88,6 @@ function Game () {
         setGridState(Array(rows).fill().map(() => Array(cols).fill(null)));
         setB(new Board(rows, cols, mines));
         setMineCounter(mines);
-        setGameStatus('playing')
     }
 
     const handleCellHover = (row, col) => {
@@ -70,7 +98,11 @@ function Game () {
         setHoveredCell(null);
     }
 
-    const cellHandleClick = (i, j) => {
+    const handleCellClick = (i, j) => {
+        if (!isRunning) {
+            startTimer();
+        }
+
         let result = B.click(i,j);
         const newGridState = [...gridState];
         newGridState[i][j] = result;
@@ -81,7 +113,7 @@ function Game () {
         };
     }
 
-    const cellSpaceClick = (i, j) => {
+    const handleCellSpace = (i, j) => {
         let result;
 
         if (gridState[i][j] == null) {
@@ -116,7 +148,7 @@ function Game () {
                     continue
                 }
 
-                if (gridState[newI][newJ] == FLAG) {
+                if ((newI >= 0 && newI < gridState.length && newJ >= 0 && newJ < gridState[0].length) && (gridState[newI][newJ] == FLAG)) {
                     counter++
                 }
             }
@@ -134,16 +166,13 @@ function Game () {
 
                 if (newI >= 0 && newI < gridState.length && newJ >= 0 && newJ < gridState[0].length) {
                     if (gridState[newI][newJ] == null) {
-                        cellHandleClick(newI,newJ)
+                        handleCellClick(newI,newJ)
                     }
                 }
             };
         };
     };
 
-    function resetGane() {
-        setDifficulty(difficulty)
-    }
 
     return (
         <div className="px-[20%] my-10">
@@ -170,7 +199,7 @@ function Game () {
             </div>
             <div className="game-window bg-gray-200 p-10">
                 <div className="counters flex flex-row gap-3 justify-between text-xl font-bold">
-                    <p>00</p>
+                    <p>{gameTime}</p>
                     <div className="button w-8 h-8 border border-gray-300 rounded active:bg-gray-300">
                         <img src = {smileUrl} onClick={resetGame}></img>
                     </div>
@@ -186,7 +215,7 @@ function Game () {
                                     return (
                                         <div 
                                             key = {`${rowIndex}-${colIndex}`} 
-                                            onClick={() => cellHandleClick(rowIndex, colIndex) } 
+                                            onClick={() => handleCellClick(rowIndex, colIndex) } 
                                             onMouseEnter={() => handleCellHover(rowIndex, colIndex )}
                                             onMouseLeave={handleCellLeave}
                                             className="text-center w-5 h-5 bg-gray cursor-pointer bg-slate-400 hover:bg-slate-500 active:bg-slate-600 outline-2 outline outline-slate-500"
