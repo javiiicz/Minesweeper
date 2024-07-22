@@ -77,7 +77,6 @@ function Game () {
         }
 
     }, [hoveredCell]);
-    //
 
 
     function generateGrid() {
@@ -115,28 +114,28 @@ function Game () {
     }
 
     const handleCellSpace = (i, j) => {
-        let result;
+        const newGridState = JSON.parse(JSON.stringify(gridState))
+        let newMineCounter = mineCounter;
 
-        if (gridState[i][j] == null) {
-            result = FLAG
-            setMineCounter(mineCounter - 1)
-        }
-        else if (gridState[i][j] == FLAG) {
-            result = null
-            setMineCounter(mineCounter + 1)
-        }
-        else if (gridState[i][j] == flagsAround(i,j)) {
+        if (newGridState[i][j] === null) {
+            newGridState[i][j] = FLAG
+            newMineCounter -= 1
+        } else if (newGridState[i][j] == FLAG) {
+            newGridState[i][j] = null
+            newMineCounter += 1
+        } else if (newGridState[i][j] == flagsAround(i,j)) {
             revealSurroundingCells(i,j)
             return
-        }
-        else {
+        } else {
             return
         }
         
-        const newGridState = [...gridState];
-        newGridState[i][j] = result;
-        setGridState(newGridState);
-    }
+        setGridState(newGridState)
+        setMineCounter(newMineCounter)
+
+        // Update hovered cell
+        setHoveredCell({row: i, col: j})
+    };
 
     function flagsAround(i,j)  {
         let counter = 0;
@@ -154,7 +153,7 @@ function Game () {
                 }
             }
         }
-
+        console.log(counter)
         return counter
     }
 
