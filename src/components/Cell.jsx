@@ -8,11 +8,10 @@ function Cell(props) {
 
 
     if (state == FLAG) {
-        content = "🚩"
-        style = "covered"
+        style = "covered bg-[url('/src/images/flag.svg')]"
     } else if (state == MINE) {
         content = "💣"
-        style += "bg-gray-800"
+        style += "bg-red-400"
     } else if (state == 0) {
         style += "bg-gray-400"
     } else if (state in [1,2,3,4,5,6,7,8]){

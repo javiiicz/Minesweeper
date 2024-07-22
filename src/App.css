@@ -5,12 +5,10 @@ body {
 }
 
 .covered {
-    border-width: 3px;
+    border-width: 2px;
     border-style: outset;
 }
 
 .uncovered {
     border-width: 0px;
-    border-style: solid;
-
 }
