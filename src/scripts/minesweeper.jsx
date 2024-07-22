@@ -1,3 +1,5 @@
+const MINE = "*"
+const EMPTY = null;
 export class Board {
     constructor(rows, cols, mines) {
         this.rows = rows
@@ -20,7 +22,7 @@ export class Board {
             this.hasGenerated = !this.hasGenerated
         }
 
-        if (this.matrix[i][j] == "*") {
+        if (this.matrix[i][j] == MINE) {
             return(-1)
         }
         else {
@@ -43,8 +45,8 @@ export class Board {
             let row = Math.floor(Math.random() * this.rows)
             let col = Math.floor(Math.random() * this.cols)
             
-            if ((row != i || col != j) && (this.matrix[row][col] != "*")) {
-                this.matrix[row][col] = "*"
+            if ((row != i || col != j) && (this.matrix[row][col] != MINE)) {
+                this.matrix[row][col] = MINE
                 counter++
             }
         }
@@ -55,7 +57,7 @@ export class Board {
     fill_board_numbers() {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.cols; j++) {
-                if (this.matrix[i][j] != "*") {
+                if (this.matrix[i][j] != MINE) {
                     this.matrix[i][j] = this.calculate_mines_around(i,j).toString()
                 }
             }
@@ -76,7 +78,7 @@ export class Board {
                     continue
                 }
                 
-                else if (this.matrix[i + a][j + b] == "*") {   
+                else if (this.matrix[i + a][j + b] == MINE) {   
                     counter++
                 }
             }
@@ -95,10 +97,10 @@ export class Board {
                 if (i == -1 || j == -1 || i == this.rows || j == this.cols) {
                     out += "⬜\t"
                 }
-                else if (this.matrix[i][j] == null) {
+                else if (this.matrix[i][j] == EMPTY) {
                     out += "0\t"
                 }
-                else if (this.matrix[i][j] == "*") {
+                else if (this.matrix[i][j] == MINE) {
                     out += "💣\t"
                 }
                 else {

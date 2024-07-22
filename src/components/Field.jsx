@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import {motion, AnimatePresence} from 'framer-motion';
 import smileUrl from '../images/ms-smile.webp'
 import {Board} from "../scripts/minesweeper.jsx"
+import Cell from "./Cell.jsx"
 
 const FLAG = "F"
 const MAX_TIME = 999
@@ -206,11 +207,11 @@ function Game () {
                     <p>{mineCounter}</p>
                 </div>
                 
-                <div className="flex justify-center bg-gray-300 m-2 py-12 ">
+                <div className="flex justify-center bg-gray-300 py-12 ">
                     <div className="mines my-auto">
                         {grid.map(function(row, rowIndex) {
                             return (
-                                <div key={rowIndex} className="flex flex-row gap-1 m-1">
+                                <div key={rowIndex} className="flex flex-row">
                                 {row.map(function(cell, colIndex) {
                                     return (
                                         <div 
@@ -218,9 +219,9 @@ function Game () {
                                             onClick={() => handleCellClick(rowIndex, colIndex) } 
                                             onMouseEnter={() => handleCellHover(rowIndex, colIndex )}
                                             onMouseLeave={handleCellLeave}
-                                            className="text-center w-5 h-5 bg-gray cursor-pointer bg-slate-400 hover:bg-slate-500 active:bg-slate-600 outline-2 outline outline-slate-500"
+                                            className="text-center w-6 h-6 bg-gray cursor-pointer bg-gray-400 hover:bg-gray-500 active:bg-gray-600 outline-1 outline outline-gray-500"
                                         >
-                                            {gridState[rowIndex][colIndex]}
+                                            <Cell state={gridState[rowIndex][colIndex]}/>
                                         </div>
                                     );
                                 })}

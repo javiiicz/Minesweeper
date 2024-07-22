@@ -2,5 +2,15 @@
 
 body {
     font-family: Plus Jakarta Sans, sans-serif;
-  }
-  
+}
+
+.covered {
+    border-width: 3px;
+    border-style: outset;
+}
+
+.uncovered {
+    border-width: 0px;
+    border-style: solid;
+
+}
