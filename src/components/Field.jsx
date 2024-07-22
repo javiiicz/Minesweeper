@@ -13,16 +13,22 @@ const DIFFICULTIES = {
 }
 
 function Game () {
-    // Game Variables
+    // Menu
     const [isVisible, setIsVisible] = useState(false);
     const [difficulty, setDifficulty] = useState("expert");
+
+    // Grid
     const [grid, setGrid] = useState([]);
     const [gridState, setGridState] = useState([]);
     const [hoveredCell, setHoveredCell] = useState(null);
     const [B, setB] = useState(null);
-    const [isRunning, setIsRunning] = useState(false)
+    
+    // Game Variables
     const [mineCounter, setMineCounter] = useState(0)
     const [gameTime, setGameTime] = useState(0)
+    const [isRunning, setIsRunning] = useState(false)
+    const [isPlaying, setIsPlaying] = useState(true)
+
 
     const startTimer = () => setIsRunning(true);
     const stopTimer = () => setIsRunning(false)
@@ -36,10 +42,10 @@ function Game () {
         setHoveredCell(null)
         generateGrid()
         resetTimer();
+        setIsPlaying(true);
     }, [difficulty])
 
     
-    //
     useEffect(() => {
         let intervalId;
         if (isRunning && gameTime < MAX_TIME) {
@@ -99,6 +105,10 @@ function Game () {
     }
 
     const handleCellClick = (i, j) => {
+        if (!isPlaying){
+            return
+        }
+
         if (!isRunning) {
             startTimer();
         }
@@ -108,12 +118,20 @@ function Game () {
         newGridState[i][j] = result;
         setGridState(newGridState);
 
+        if (result == -1) {
+            gameOver()
+        }
+
         if (result == 0) {
             revealSurroundingCells(i,j)
         };
     }
 
     const handleCellSpace = (i, j) => {
+        if (!isPlaying){
+            return
+        }
+
         const newGridState = JSON.parse(JSON.stringify(gridState))
         let newMineCounter = mineCounter;
 
@@ -172,6 +190,11 @@ function Game () {
             };
         };
     };
+
+    const gameOver = () => {
+        stopTimer()
+        setIsPlaying(false)
+    }
 
 
     return (
