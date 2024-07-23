@@ -198,58 +198,62 @@ function Game () {
 
 
     return (
-        <div className="px-[20%] my-10">
-            <div className="text-lg flex flex-row justify-between">
-                <div className="flex flex-row gap-3">
-                    <a className="font-bold cursor-pointer" onClick={() => setIsVisible(prevState => !prevState)}>New Game</a>
-                    <AnimatePresence>
-                        {isVisible && (
-                            <motion.div
-                                className="flex flex-row gap-3"
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.5 }}
-                            >
-                                <p onClick={() => setDifficulty("beginner")} className="hover:font-medium transition-all cursor-pointer">Beginner</p>
-                                <p onClick={() => setDifficulty("intermediate")} className="hover:font-medium transition-all cursor-pointer">Intermediate</p>
-                                <p onClick={() => setDifficulty("expert")} className="hover:font-medium transition-all cursor-pointer">Expert</p>
-                            </motion.div>
-                        )}
-            
-                    </AnimatePresence>
-                </div>
-            </div>
-            <div className="game-window bg-gray-200 p-10">
-                <div className="counters flex flex-row gap-3 justify-between text-xl font-bold">
-                    <p>{gameTime}</p>
-                    <div className="button w-8 h-8 border border-gray-300 rounded active:bg-gray-300">
-                        <img src = {smileUrl} onClick={resetGame}></img>
-                    </div>
-                    <p>{mineCounter}</p>
-                </div>
+        <div className="flex justify-center items-center mb-16">
+            <div className="inline-block mx-auto">
                 
-                <div className="flex justify-center bg-gray-300 py-12 ">
-                    <div className="mines my-auto">
-                        {grid.map(function(row, rowIndex) {
-                            return (
-                                <div key={rowIndex} className="flex flex-row">
-                                {row.map(function(cell, colIndex) {
-                                    return (
-                                        <div 
-                                            key = {`${rowIndex}-${colIndex}`} 
-                                            onClick={() => handleCellClick(rowIndex, colIndex) } 
-                                            onMouseEnter={() => handleCellHover(rowIndex, colIndex )}
-                                            onMouseLeave={handleCellLeave}
-                                            className="text-center w-6 h-6 bg-gray cursor-pointer bg-gray-400 hover:bg-gray-500 active:bg-gray-600 outline-1 outline outline-gray-500"
-                                        >
-                                            <Cell state={gridState[rowIndex][colIndex]}/>
-                                        </div>
-                                    );
-                                })}
-                                </div>
-                            );
-                        })}
+                <div className="text-lg">
+                    <div className="flex flex-row gap-3">
+                        <a className="font-bold cursor-pointer" onClick={() => setIsVisible(prevState => !prevState)}>New Game</a>
+                        <AnimatePresence>
+                            {isVisible && (
+                                <motion.div
+                                    className="flex flex-row gap-3"
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <p onClick={() => setDifficulty("beginner")} className="hover:font-medium transition-all cursor-pointer">Beginner</p>
+                                    <p onClick={() => setDifficulty("intermediate")} className="hover:font-medium transition-all cursor-pointer">Intermediate</p>
+                                    <p onClick={() => setDifficulty("expert")} className="hover:font-medium transition-all cursor-pointer">Expert</p>
+                                </motion.div>
+                            )}
+            
+                        </AnimatePresence>
+                    </div>
+                </div>
+            
+                <div className="game-window bg-gray-200 px-10 py-4 inline-block">
+                    <div className="counters flex flex-row gap-3 justify-between text-xl font-bold">
+                        <p>{gameTime}</p>
+                        <div className="button w-8 h-8 border border-gray-300 rounded active:bg-gray-300">
+                            <img src = {smileUrl} onClick={resetGame}></img>
+                        </div>
+                        <p>{mineCounter}</p>
+                    </div>
+            
+                    <div className="flex justify-center bg-gray-300 py-12 px-10">
+                        <div className="mines my-auto">
+                            {grid.map(function(row, rowIndex) {
+                                return (
+                                    <div key={rowIndex} className="flex flex-row">
+                                    {row.map(function(cell, colIndex) {
+                                        return (
+                                            <div
+                                                key = {`${rowIndex}-${colIndex}`}
+                                                onClick={() => handleCellClick(rowIndex, colIndex) }
+                                                onMouseEnter={() => handleCellHover(rowIndex, colIndex )}
+                                                onMouseLeave={handleCellLeave}
+                                                className="text-center w-6 h-6 bg-gray cursor-pointer bg-gray-400 hover:bg-gray-500 active:bg-gray-600 outline-1 outline outline-gray-500"
+                                            >
+                                                <Cell state={gridState[rowIndex][colIndex]}/>
+                                            </div>
+                                        );
+                                    })}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>
