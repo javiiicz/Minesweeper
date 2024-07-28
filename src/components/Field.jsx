@@ -225,14 +225,14 @@ function Game () {
             
                 <div className="game-window bg-gray-200 px-10 py-4 inline-block">
                     <div className="counters flex flex-row gap-3 justify-between text-xl font-bold">
-                        <p>{gameTime}</p>
+                        <p className="w-12">{gameTime}</p>
                         <div className="button w-8 h-8 border border-gray-300 rounded active:bg-gray-300">
                             <img src = {smileUrl} onClick={resetGame}></img>
                         </div>
-                        <p>{mineCounter}</p>
+                        <p className="w-12 text-right">{mineCounter}</p>
                     </div>
             
-                    <div className="flex justify-center bg-gray-300 py-12 px-10">
+                    <div className="game-container flex justify-center bg-gray-300 m-1 py-8 px-8">
                         <div className="mines my-auto">
                             {grid.map(function(row, rowIndex) {
                                 return (
