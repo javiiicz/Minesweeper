@@ -3,6 +3,7 @@ import {motion, AnimatePresence} from 'framer-motion';
 import smileUrl from '../images/ms-smile.webp'
 import {Board} from "../scripts/minesweeper.jsx"
 import Cell from "./Cell.jsx"
+import Announcement from "./Announcement.jsx"
 
 const FLAG = "F"
 const MAX_TIME = 999
@@ -16,6 +17,7 @@ function Game () {
     // Menu
     const [isVisible, setIsVisible] = useState(false);
     const [difficulty, setDifficulty] = useState("expert");
+    const [announcementType, setAnnouncementType] = useState(0);
 
     // Grid
     const [grid, setGrid] = useState([]);
@@ -24,6 +26,7 @@ function Game () {
     const [B, setB] = useState(null);
     
     // Game Variables
+    const [uncoveredCounter, setUncoveredCounter] = useState(0)
     const [mineCounter, setMineCounter] = useState(0)
     const [gameTime, setGameTime] = useState(0)
     const [isRunning, setIsRunning] = useState(false)
@@ -43,6 +46,8 @@ function Game () {
         generateGrid()
         resetTimer();
         setIsPlaying(true);
+        setAnnouncementType(0);
+        setUncoveredCounter(0)
     }, [difficulty])
 
     
@@ -115,16 +120,29 @@ function Game () {
 
         let result = B.click(i,j);
         const newGridState = [...gridState];
+        let newCounter = uncoveredCounter
+        newCounter += 1
         newGridState[i][j] = result;
         setGridState(newGridState);
+        setUncoveredCounter(newCounter)
 
         if (result == -1) {
             gameOver()
+            return
         }
 
         if (result == 0) {
             revealSurroundingCells(i,j)
         };
+
+        const {rows, cols, mines} = DIFFICULTIES[difficulty]
+        const covered = (rows * cols) - newCounter
+        console.log(covered, mines)
+        if (covered == mines){
+            winGame()
+            return
+        }
+            
     }
 
     const handleCellSpace = (i, j) => {
@@ -171,7 +189,6 @@ function Game () {
                 }
             }
         }
-        console.log(counter)
         return counter
     }
 
@@ -194,6 +211,13 @@ function Game () {
     const gameOver = () => {
         stopTimer()
         setIsPlaying(false)
+        setAnnouncementType(2)
+    }
+
+    const winGame = () => {
+        stopTimer()
+        setIsPlaying(false)
+        setAnnouncementType(1)
     }
 
 
@@ -232,7 +256,7 @@ function Game () {
                         <p className="w-12 text-right">{mineCounter}</p>
                     </div>
             
-                    <div className="game-container flex justify-center bg-gray-300 m-1 py-8 px-8">
+                    <div className="game-container flex justify-center bg-gray-300 m-1 py-8 px-8 relative">
                         <div className="mines my-auto">
                             {grid.map(function(row, rowIndex) {
                                 return (
@@ -254,6 +278,11 @@ function Game () {
                                 );
                             })}
                         </div>
+
+                        <div className="announcement absolute top-0 left-0 w-full h-full flex flex-row justify-center items-center pointer-events-none">
+                            <Announcement type={announcementType}/>
+                        </div>
+
                     </div>
                 </div>
             </div>
