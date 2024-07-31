@@ -140,7 +140,6 @@ function Game () {
                 }
             }
         }
-        console.log(covered)
         if (covered == mines){
             winGame()
             return
