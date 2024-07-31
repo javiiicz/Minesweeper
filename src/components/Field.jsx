@@ -288,7 +288,7 @@ function Game () {
                                     animate={{ opacity: 1}}
                                     transition={{ duration: 1 , delay: 0.5}}
                                 >
-                                    <Announcement type={announcementType} score={gameTime}/>
+                                    <Announcement type={announcementType} score={gameTime} diff={difficulty}/>
                             </motion.div>    
                         }
                         </AnimatePresence> 
