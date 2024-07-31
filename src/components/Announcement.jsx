@@ -12,6 +12,10 @@ function Announcement (props) {
         setInitials(newVal)
     }
 
+    const submit = () => {
+        console.log(initials + " has score " + score + " with difficulty: " + difficulty)
+    }
+
     switch (props.type) {
         case 0: // None
             style = "hidden pointer-events-none"
@@ -37,7 +41,11 @@ function Announcement (props) {
                             maxLength={3} value={initials} 
                             onChange={changeVal}>
                         </input> 
-                        <div className="bg-gray-800 text-gray-50 p-1 px-2 rounded font-bold cursor-pointer hover:bg-blue-800 transition-all duration-500">Submit Score</div>
+                        <div 
+                            onClick={submit}
+                            className="bg-gray-800 text-gray-50 p-1 px-2 rounded font-bold cursor-pointer hover:bg-blue-800 transition-all duration-500">
+                                Submit Score
+                        </div>
                     </div>
                     : null
                 }
