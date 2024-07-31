@@ -3,6 +3,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Game from './components/Field'
 import Instructions from './components/Instructions'
+import Scores from './components/Scores';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <h1 className='text-4xl font-extrabold mx-[5%] my-6'>Minesweeper</h1>  
           <Game/>
           <Instructions/>
+          <Scores/>
         </main>
       <Footer />
     </div>
