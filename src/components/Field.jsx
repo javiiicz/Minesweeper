@@ -4,6 +4,7 @@ import smileUrl from '../images/ms-smile.webp'
 import {Board} from "../scripts/minesweeper.jsx"
 import Cell from "./Cell.jsx"
 import Announcement from "./Announcement.jsx"
+import { jsx } from "react/jsx-runtime";
 
 const FLAG = "F"
 const MAX_TIME = 999
@@ -26,7 +27,6 @@ function Game () {
     const [B, setB] = useState(null);
     
     // Game Variables
-    const [uncoveredCounter, setUncoveredCounter] = useState(0)
     const [mineCounter, setMineCounter] = useState(0)
     const [gameTime, setGameTime] = useState(0)
     const [isRunning, setIsRunning] = useState(false)
@@ -47,7 +47,6 @@ function Game () {
         resetTimer();
         setIsPlaying(true);
         setAnnouncementType(0);
-        setUncoveredCounter(0)
     }, [difficulty])
 
     
@@ -120,11 +119,8 @@ function Game () {
 
         let result = B.click(i,j);
         const newGridState = [...gridState];
-        let newCounter = uncoveredCounter
-        newCounter += 1
         newGridState[i][j] = result;
         setGridState(newGridState);
-        setUncoveredCounter(newCounter)
 
         if (result == -1) {
             gameOver()
@@ -133,11 +129,18 @@ function Game () {
 
         if (result == 0) {
             revealSurroundingCells(i,j)
-        };
+        }
 
         const {rows, cols, mines} = DIFFICULTIES[difficulty]
-        const covered = (rows * cols) - newCounter
-        console.log(covered, mines)
+        let covered = 0
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (gridState[i][j] === null || gridState[i][j] == FLAG) {
+                    covered += 1
+                }
+            }
+        }
+        console.log(covered)
         if (covered == mines){
             winGame()
             return
