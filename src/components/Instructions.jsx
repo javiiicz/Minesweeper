@@ -1,6 +1,6 @@
 function Instructions () {
     return (
-        <div className="mx-[10%] pb-12">
+        <div className="px-[10%] p-10 bg-slate-100">
             <span className="font-bold">Instructions: </span>
             <div className="pl-8">
                 <ul className="list-disc">
