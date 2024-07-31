@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
+import { collection, query, orderBy, limit, addDoc, getDocs, deleteDoc, doc} from "firebase/firestore"
+import { db } from "../scripts/firebase"
 
 function Announcement (props) {
     let style = ""
@@ -6,14 +8,58 @@ function Announcement (props) {
     const score = props.score
     const difficulty = props.diff
     const [initials, setInitials] = useState("")
+    const submitted = useRef(false)
+
 
     const changeVal = event => {
         const newVal = event.target.value
         setInitials(newVal)
     }
 
-    const submit = () => {
-        console.log(initials + " has score " + score + " with difficulty: " + difficulty)
+    async function submit() {
+        if (submitted.current) { // Avoid double submissions
+            return
+        }
+
+        const ref = collection(db, difficulty)
+
+        // Query top 10 scores
+        const q = query(ref, orderBy("points", "asc"), limit(10))
+        
+        const querySnapshot = await getDocs(q)
+
+        const top10 = querySnapshot.docs.map(doc => doc.data().points);
+        
+        // If better than top 10, add score
+        if (top10.length < 10 || score < top10[top10.length - 1]) { 
+            try {
+                const docRef = await addDoc(ref, {
+                    name: initials,
+                    points: score
+                });
+                console.log("Added " + initials + " with score " + score + " and difficulty: " + difficulty)
+                submitted.current = true
+
+                // Remove score if larger than 10
+                if (top10.length === 10) {
+                    const newq = query(ref, orderBy("points", "desc"), limit(1))
+                    const lowestScoreDoc = await getDocs(newq)
+
+                    if (!lowestScoreDoc.empty) {
+                        await deleteDoc(lowestScoreDoc.docs[0].ref)
+                        console.log("removed", lowestScoreDoc)
+                    }
+                }
+
+            } catch (e) {
+                console.log("Error adding document: ", e)
+            }
+        }
+        
+
+
+
+        
     }
 
     switch (props.type) {
