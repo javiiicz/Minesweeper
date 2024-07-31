@@ -113,7 +113,7 @@ function Game () {
             return
         }
 
-        if (!isRunning) {
+        if (!isRunning){
             startTimer();
         }
 
@@ -280,21 +280,18 @@ function Game () {
                                 );
                             })}
                         </div>
-
-                        <div className="announcement absolute top-0 left-0 w-full h-full flex flex-row justify-center items-center pointer-events-none">
-                            <AnimatePresence>
-                                {!isRunning &&
-                                    <motion.div
-                                        initial={{ opacity: 0}}
-                                        animate={{ opacity: 1}}
-                                        exit={{ opacity: 0}}
-                                        transition={{ duration: 1 , delay: 0.5}}
-                                    >
-                                        <Announcement type={announcementType}/>
-                                    </motion.div>  
-                                }
-                            </AnimatePresence>   
-                        </div>
+                        
+                        <AnimatePresence>
+                        {!isRunning &&
+                            <motion.div
+                                    initial={{ opacity: 0}}
+                                    animate={{ opacity: 1}}
+                                    transition={{ duration: 1 , delay: 0.5}}
+                                >
+                                    <Announcement type={announcementType} score={gameTime}/>
+                            </motion.div>    
+                        }
+                        </AnimatePresence> 
 
                     </div>
                 </div>
