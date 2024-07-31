@@ -2,17 +2,16 @@ import './App.css';
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Game from './components/Field'
-import {Test} from "./components/testScript"
+import Instructions from './components/Instructons'
 
 function App() {
   return (
     <div className="bg-gray-50">
       <Header />
         <main className="overflow-hidden text-gray-900">
-          <h1 className='text-4xl font-extrabold mx-[5%] my-6'>Minesweeper</h1>
+          <h1 className='text-4xl font-extrabold mx-[5%] my-6'>Minesweeper</h1>  
           <Game/>
-          {//Test/>
-          }
+          <Instructions/>
         </main>
       <Footer />
     </div>
