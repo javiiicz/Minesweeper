@@ -47,7 +47,7 @@ function Announcement (props) {
 
                     if (!lowestScoreDoc.empty) {
                         await deleteDoc(lowestScoreDoc.docs[0].ref)
-                        console.log("removed", lowestScoreDoc)
+                        console.log("removed ", lowestScoreDoc)
                     }
                 }
 
