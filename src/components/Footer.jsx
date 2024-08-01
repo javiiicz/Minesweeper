@@ -1,7 +1,7 @@
 function Footer() {
     return (
         <footer className="static bg-[url('/src/images/Footer-background-2.png')] bg-cover bg-bottom">
-            <div className="backdrop-blur-2xl border-t border-gray-200 flex flex-row-reverse justify-between h-40 md:px-72 sm:px-32 px-10">
+            <div className="noise-overlay backdrop-blur-2xl border-t border-gray-200 flex flex-row-reverse justify-between h-40 md:px-72 sm:px-32 px-10">
                     <div className="text-4xl font-extrabold grid grid-rows-2 gap-0 items-center justify-items-center">
                         <p className="drop-shadow-lg">Socials</p>
                         <div className="grid grid-cols-2 gap-3">
