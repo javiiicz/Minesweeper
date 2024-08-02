@@ -14,7 +14,7 @@ const DIFFICULTIES = {
     expert: {rows: 16, cols: 30, mines: 99}
 }
 
-function Game () {
+function Game (props) {
     // Menu
     const [isVisible, setIsVisible] = useState(false);
     const [difficulty, setDifficulty] = useState("expert");
@@ -287,7 +287,7 @@ function Game () {
                                     animate={{ opacity: 1}}
                                     transition={{ duration: 1 , delay: 0.5}}
                                 >
-                                    <Announcement type={announcementType} score={gameTime} diff={difficulty}/>
+                                    <Announcement type={announcementType} score={gameTime} diff={difficulty} scoreList={props.scoreList}/>
                             </motion.div>    
                         }
                         </AnimatePresence> 

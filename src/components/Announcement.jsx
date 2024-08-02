@@ -6,6 +6,7 @@ function Announcement (props) {
     let style = ""
     let content = ""
     const score = props.score
+    const scoreList = props.scoreList
     const difficulty = props.diff
     const [initials, setInitials] = useState("")
     const submitted = useRef(false)
@@ -20,19 +21,21 @@ function Announcement (props) {
         if (submitted.current) { // Avoid double submissions
             return
         }
-
-        const ref = collection(db, difficulty)
-
-        // Query top 10 scores
-        const q = query(ref, orderBy("points", "asc"), limit(10))
         
-        const querySnapshot = await getDocs(q)
+        let top10;
+        if (difficulty == "beginner") {
+            top10 = scores["top10Beg"].map(doc => doc.points);
+        } else if (difficulty == "intermediate") {
+            top10 = scores["top10Int"].map(doc => doc.points);
+        } else {
+            top10 = scores["top10Exp"].map(doc => doc.points);
+        }
 
-        const top10 = querySnapshot.docs.map(doc => doc.data().points);
         
         // If better than top 10, add score
         if (top10.length < 10 || score < top10[top10.length - 1]) { 
             try {
+                const ref = collection(db, difficulty)
                 const docRef = await addDoc(ref, {
                     name: initials,
                     points: score
