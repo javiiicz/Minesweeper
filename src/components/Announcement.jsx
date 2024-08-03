@@ -24,11 +24,11 @@ function Announcement (props) {
         
         let top10;
         if (difficulty == "beginner") {
-            top10 = scores["top10Beg"].map(doc => doc.points);
+            top10 = scoreList["top10Beg"].map(doc => doc.points);
         } else if (difficulty == "intermediate") {
-            top10 = scores["top10Int"].map(doc => doc.points);
+            top10 = scoreList["top10Int"].map(doc => doc.points);
         } else {
-            top10 = scores["top10Exp"].map(doc => doc.points);
+            top10 = scoreList["top10Exp"].map(doc => doc.points);
         }
 
         
