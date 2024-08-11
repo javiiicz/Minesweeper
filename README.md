@@ -4,6 +4,8 @@ By Javier Carrillo
 
 React app where you can play the classic Microsoft minesweeper game. Play at https://javiiicz.github.io/Minesweeper.
 
+![minesweeper image](Minesweeper_img.png)
+
 ### Instructions:
 The objective of the game is to decipher the location of all the mines in the field.
 Click to reveal a cell or press space to flag it.
