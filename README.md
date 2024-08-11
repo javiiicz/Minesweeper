@@ -2,7 +2,7 @@
 
 By Javier Carrillo
 
-React app where you can play the classic Microsoft minesweeper game. Play at https://javiiicz.github.io/Minesweeper.
+React app where you can play the classic Microsoft minesweeper game and see high-scores. Play at https://javiiicz.github.io/Minesweeper.
 
 ![minesweeper image](Minesweeper_img.png)
 
